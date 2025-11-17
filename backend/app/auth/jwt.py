@@ -4,8 +4,11 @@ from fastapi.security import OAuth2PasswordBearer
 import jwt
 
 # ==== JWT CONFIGURATION ====
+##ENV OR CONST
 SECRET_KEY = "super_secret_change_me"
 ALGORITHM = "HS256"
+
+##MAGIC NUMBER
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
@@ -25,12 +28,14 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exc = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
+        ##MAGIC STRING
         detail="could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        ##MAGIC STRING
         username: str | None = payload.get("sub")
         role: str | None = payload.get("role")
 
@@ -39,15 +44,17 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 
     except jwt.PyJWTError:
         raise credentials_exc
-
+    ##MAGIC STRING
     return {"username": username, "role": role}
 
 
 # ==== ADMIN ONLY ====
 def get_current_admin(user: dict = Depends(get_current_user)):
+    ##MAGIC STRING
     if user.get("role") != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
+            ##MAGIC STRING
             detail="admin access required",
         )
     return user
