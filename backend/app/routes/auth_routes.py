@@ -17,6 +17,7 @@ def signup(req: SignupRequest):
             username=req.username,
             email=req.email,
             password=req.password,
+            ##MAGIC STRING
             role="user"
         )
         
@@ -24,10 +25,12 @@ def signup(req: SignupRequest):
         
         # יצירת טוקן
         token = create_access_token(
+            ##MAGIC STRING
             {"sub": user["username"], "role": user["role"]}
         )
         
         response = {
+            #MAGIC STRINGS
             "access_token": token,
             "token_type": "bearer",
             "role": user["role"],
@@ -62,6 +65,7 @@ def login(req: LoginRequest):
             print(f"❌ DEBUG: Authentication failed for {req.username}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
+                ##MAGIC STRING
                 detail="incorrect username or password",
             )
         
@@ -69,10 +73,12 @@ def login(req: LoginRequest):
         
         # יצירת טוקן
         token = create_access_token(
+            ##MAGIC STRING
             {"sub": user["username"], "role": user.get("role", "user")}
         )
         
         response = {
+            ##MAGIC STRING
             "access_token": token,
             "token_type": "bearer",
             "role": user.get("role", "user"),

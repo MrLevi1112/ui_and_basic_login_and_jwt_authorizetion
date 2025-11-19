@@ -88,7 +88,7 @@ function App() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("http://127.0.0.1:8000/api/estimate", {
+      const response = await fetch("http://127.0.0.1:8001/api/estimate", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ function App() {
       setLoginLoading(true);
       console.log("🔵 Sending login request...");
 
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
+      const response = await fetch("http://127.0.0.1:8001/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -163,7 +163,7 @@ function App() {
       setSignupLoading(true);
       console.log("🔵 Sending signup request...");
 
-      const response = await fetch("http://127.0.0.1:8000/api/signup", {
+      const response = await fetch("http://127.0.0.1:8001/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
