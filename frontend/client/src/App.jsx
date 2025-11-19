@@ -26,6 +26,20 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState("");
 
+  // Load token from localStorage on mount
+  useEffect(() => {
+    const savedToken = localStorage.getItem('crash2cost_token');
+    if (savedToken) {
+      console.log("✅ Found saved token, restoring session...");
+      setToken(savedToken);
+      const decoded = parseJwt(savedToken);
+      if (decoded && decoded.role) {
+        setUserRole(decoded.role);
+        console.log("✅ Restored user role:", decoded.role);
+      }
+    }
+  }, []);
+
   // Intro screen timeout
   useEffect(() => {
     const t = setTimeout(() => setShowIntro(false), 2000);
@@ -36,6 +50,7 @@ function App() {
 
   const handleLoginSuccess = (accessToken) => {
     setToken(accessToken);
+    localStorage.setItem('crash2cost_token', accessToken);
     // Decode token to get user role
     const decoded = parseJwt(accessToken);
     if (decoded && decoded.role) {
@@ -46,6 +61,7 @@ function App() {
 
   const handleSignupSuccess = (accessToken) => {
     setToken(accessToken);
+    localStorage.setItem('crash2cost_token', accessToken);
     setShowSignup(false);
     // Decode token to get user role
     const decoded = parseJwt(accessToken);
@@ -60,6 +76,8 @@ function App() {
     setUserRole(null);
     setAnalysisResult(null);
     setAnalysisError("");
+    localStorage.removeItem('crash2cost_token');
+    console.log("👋 Logged out and cleared saved session");
   };
 
   const handleAnalysisStart = () => {
