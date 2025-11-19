@@ -1,6 +1,6 @@
 # נקודות קצה לאומדן נזקים
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, status
-from app.auth.jwt import get_current_user  # שונה מ-get_current_admin
+from app.auth.jwt import get_current_user, get_current_admin  # הוספת get_current_admin
 from app.services.damage_model import analyze_image_dummy
 from app.database.mongo import get_db
 from datetime import datetime
@@ -108,3 +108,39 @@ async def estimate_damage(
         "totalCost": total_cost,
         "createdAt": created_at.isoformat() + "Z",
     }
+
+
+@router.get("/admin/estimates")
+async def get_all_estimates(
+    admin: dict = Depends(get_current_admin),
+):
+    """קבלת כל האומדנים - רק למנהלים"""
+    print(f"🔵 DEBUG: Admin estimates request - admin: {admin.get('username')}")
+    
+    try:
+        db = get_db()
+        
+        # שליפת כל האומדנים ממסד הנתונים
+        estimates = list(db.estimates.find().sort("createdAt", -1))
+        
+        # המרת ObjectId ל-string עבור JSON
+        for est in estimates:
+            est["_id"] = str(est["_id"])
+            if "createdAt" in est:
+                est["createdAt"] = est["createdAt"].isoformat() + "Z"
+        
+        print(f"✅ DEBUG: Returning {len(estimates)} estimates")
+        
+        return {
+            "estimates": estimates,
+            "total": len(estimates)
+        }
+        
+    except Exception as e:
+        print(f"❌ DEBUG: Error fetching estimates - {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error fetching estimates: {str(e)}"
+        )
