@@ -31,7 +31,7 @@ Start-Sleep -Seconds 3
 
 # הפעלת Frontend
 Write-Host "[2/2] Starting Frontend Server..." -ForegroundColor $Green
-$frontendPath = Join-Path $baseDir "client"
+$frontendPath = Join-Path $baseDir "frontend\client"
 
 Start-Process powershell -ArgumentList @(
     "-NoExit",

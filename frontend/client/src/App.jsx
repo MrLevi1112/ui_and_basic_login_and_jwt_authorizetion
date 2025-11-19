@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
-import ImageUploader from "./components/ImageUploader";
-import ResultsDisplay from "./components/ResultsDisplay";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
+import ImageUploader from "./ImageUploader";
+import ResultsDisplay from "./ResultsDisplay";
 import "./App.css";
 
 function App() {

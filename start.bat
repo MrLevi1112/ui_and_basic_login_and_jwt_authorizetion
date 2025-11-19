@@ -13,7 +13,7 @@ timeout /t 3 /nobreak > nul
 
 REM הפעלת Frontend בטרמינל חדש
 echo [2/2] Starting Frontend Server...
-start "Crash2Cost Frontend" cmd /k "cd /d "%~dp0client" && npm run dev"
+start "Crash2Cost Frontend" cmd /k "cd /d "%~dp0frontend\client" && npm run dev"
 
 echo.
 echo ========================================
