@@ -1,50 +1,50 @@
 # שירותי אימות משתמשים
 from fastapi import HTTPException, status
-from app.database.mongo import get_db
 from datetime import datetime
 from uuid import uuid4
+import bcrypt
+
+# ייבוא ה-Repository החדש במקום גישה ישירה ל-Mongo
+from app.database.repositories import UserRepository
+
+# ייבוא קבועים
 from common.constants.authentication import AuthConstants
 from common.constants.errors import errorConstants
 from common.constants.database import databaseConstants
-import bcrypt
+
+# אתחול ה-Repository
+user_repo = UserRepository()
 
 def hash_password(password: str) -> str:
     """הצפנת סיסמה"""
     hashed = bcrypt.hashpw(password.encode(AuthConstants.ENCODING_ALGORITHM), bcrypt.gensalt())
-    ##MAGIC STRING
     return hashed.decode(AuthConstants.ENCODING_ALGORITHM)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """בדיקת סיסמה מול הצפנה"""
     return bcrypt.checkpw(
-        ##MAGIC STRING
         plain_password.encode(AuthConstants.ENCODING_ALGORITHM),
         hashed_password.encode(AuthConstants.ENCODING_ALGORITHM)
     )
 
 def create_user(username: str, email: str, password: str, role: str = "user") -> dict:
-    """יצירת משתמש חדש במסד הנתונים"""
-    db = get_db()
+    """יצירת משתמש חדש באמצעות ה-Repository"""
     
-    # בדיקה אם המשתמש כבר קיים
-    if db.users.find_one({"username": username}):
+    # בדיקה אם המשתמש כבר קיים (דרך ה-Repository)
+    if user_repo.find_by_username(username):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            ##MAGIC STRING
             detail=errorConstants.USERNAME_EXISTS,
         )
     
     # בדיקה אם האימייל כבר קיים
-    ##MAGIC STRING
-    if db.users.find_one({"email": email}):
+    if user_repo.find_by_email(email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            ##MAGIC STRING
             detail=errorConstants.EMAIL_EXISTS,
         )
     
     # יצירת מסמך משתמש
-    ##MAGIC STRING
     user_doc = {
         "_id": str(uuid4()),
         databaseConstants.USERNAME: username,
@@ -54,28 +54,24 @@ def create_user(username: str, email: str, password: str, role: str = "user") ->
         "createdAt": datetime.utcnow(),
     }
     
-    # שמירה במסד הנתונים
-    db.users.insert_one(user_doc)
+    # שמירה באמצעות ה-Repository
+    user_repo.create(user_doc)
     
     return user_doc
 
 def authenticate_user(username: str, password: str) -> dict | None:
     """אימות משתמש - החזרת המשתמש אם הסיסמה נכונה"""
-    db = get_db()
     
-    # בדיקת אדמין קשיח
-    ##MAGIC STRING
+    # בדיקת אדמין קשיח (לצורכי פיתוח/חירום)
     if username == "admin" and password == "admin123":
-        ##MAGIC STRING
         return {
             databaseConstants.USERNAME: "admin",
             databaseConstants.ROLE: "admin",
             "_id": "admin",
         }
     
-    # חיפוש משתמש במסד הנתונים
-    ##MAGIC STRING
-    user = db.users.find_one({databaseConstants.USERNAME: username})
+    # חיפוש משתמש דרך ה-Repository
+    user = user_repo.find_by_username(username)
     
     if not user:
         return None
