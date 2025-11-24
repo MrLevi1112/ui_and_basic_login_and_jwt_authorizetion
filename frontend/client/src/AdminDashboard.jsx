@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "./context/AuthContext";
+import api from "./services/api";
 
-function AdminDashboard({ token, onLogout }) {
+function AdminDashboard() {
+  const { logout } = useAuth();
   const [estimates, setEstimates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -14,22 +17,13 @@ function AdminDashboard({ token, onLogout }) {
     setError("");
     try {
       console.log("🔵 Fetching admin estimates...");
-      const response = await fetch("http://127.0.0.1:8001/api/admin/estimates", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get("/admin/estimates");
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch admin data");
-      }
-
-      const data = await response.json();
-      console.log("✅ Admin estimates fetched:", data);
-      setEstimates(data.estimates || []);
+      console.log("✅ Admin estimates fetched:", response.data);
+      setEstimates(response.data.estimates || []);
     } catch (err) {
       console.error("❌ Error fetching estimates:", err);
-      setError(err.message);
+      setError(err.message || "Failed to fetch estimates");
     } finally {
       setLoading(false);
     }
@@ -64,7 +58,7 @@ function AdminDashboard({ token, onLogout }) {
                 Overview of all damage estimates submitted by users
               </p>
             </div>
-            <button onClick={onLogout} className="primary-button" style={{ padding: "10px 16px", fontSize: "13px" }}>
+            <button onClick={logout} className="primary-button" style={{ padding: "10px 16px", fontSize: "13px" }}>
               <span className="btn-text">logout</span>
             </button>
           </div>

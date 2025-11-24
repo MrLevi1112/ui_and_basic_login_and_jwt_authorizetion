@@ -1,6 +1,9 @@
+```javascript
 import { useState } from "react";
+import { useAuth } from "./context/AuthContext";
 
-function LoginForm({ onLoginSuccess, onSwitchToSignup }) {
+function LoginForm({ onSwitchToSignup }) {
+    const { login } = useAuth();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -8,42 +11,27 @@ function LoginForm({ onLoginSuccess, onSwitchToSignup }) {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+        e.preventDefault();
+        setError("");
 
-    try {
-        setLoading(true);
-        console.log("🔵 Sending login request...");
-
-        const response = await fetch("http://127.0.0.1:8001/api/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            username,
-            password,
-        }),
-        });
-
-        if (!response.ok) {
-        const errorText = await response.text();
-        console.error("❌ Login error response:", errorText);
-        throw new Error("invalid credentials");
+        try {
+            setLoading(true);
+            console.log("🔵 Sending login request...");
+            
+            await login(username, password);
+            console.log("✅ Login successful");
+            
+        } catch (err) {
+            console.error("❌ Login error:", err);
+            // Check if it's an axios error with response data
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError("wrong username or password");
+            }
+        } finally {
+            setLoading(false);
         }
-
-        const data = await response.json();
-        console.log("✅ Login successful:", data);
-
-      // Pass the token back to parent
-        onLoginSuccess(data.access_token);
-
-    } catch (err) {
-        console.error("❌ Login error:", err);
-        setError("wrong username or password");
-    } finally {
-        setLoading(false);
-    }
     };
 
     return (
@@ -132,3 +120,4 @@ function LoginForm({ onLoginSuccess, onSwitchToSignup }) {
 }
 
 export default LoginForm;
+```

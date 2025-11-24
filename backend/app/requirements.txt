@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-pillow
-pymongo
-python-multipart
-PyJWT

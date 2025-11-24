@@ -1,0 +1,48 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.crash2cost:crash2cost-api >--------------------
+[INFO] Building Crash2Cost API 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ crash2cost-api ---
+[INFO] Deleting C:\Users\idole\OneDrive\Desktop\Final project\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ crash2cost-api ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ crash2cost-api ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 29 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/idole/OneDrive/Desktop/Final project/backend/src/main/java/com/crash2cost/controller/EstimateController.java:[41,19] cannot find symbol
+  symbol:   class DamageAnalysisRepository
+  location: class com.crash2cost.controller.EstimateController
+[ERROR] /C:/Users/idole/OneDrive/Desktop/Final project/backend/src/main/java/com/crash2cost/controller/EstimateController.java:[35,1] cannot find symbol
+  symbol:   class DamageAnalysisRepository
+  location: class com.crash2cost.controller.EstimateController
+[INFO] 2 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.882 s
+[INFO] Finished at: 2025-11-24T16:49:00+02:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project crash2cost-api: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/idole/OneDrive/Desktop/Final project/backend/src/main/java/com/crash2cost/controller/EstimateController.java:[41,19] cannot find symbol
+[ERROR]   symbol:   class DamageAnalysisRepository
+[ERROR]   location: class com.crash2cost.controller.EstimateController
+[ERROR] /C:/Users/idole/OneDrive/Desktop/Final project/backend/src/main/java/com/crash2cost/controller/EstimateController.java:[35,1] cannot find symbol
+[ERROR]   symbol:   class DamageAnalysisRepository
+[ERROR]   location: class com.crash2cost.controller.EstimateController
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

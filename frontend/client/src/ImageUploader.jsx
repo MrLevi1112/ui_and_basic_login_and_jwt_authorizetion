@@ -1,6 +1,7 @@
-    import { useState } from "react";
+import { useState } from "react";
+    import api from "./services/api";
 
-    function ImageUploader({ token, onAnalysisStart, onAnalysisComplete, onError }) {
+    function ImageUploader({ onAnalysisStart, onAnalysisComplete, onError }) {
     const [file, setFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [localLoading, setLocalLoading] = useState(false);
@@ -50,13 +51,6 @@
         return;
         }
 
-        if (!token) {
-        const msg = "you must be logged in";
-        setLocalError(msg);
-        onError(msg);
-        return;
-        }
-
         try {
         setLocalLoading(true);
         onAnalysisStart(); // Notify parent loading started
@@ -65,20 +59,13 @@
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await fetch("http://127.0.0.1:8001/api/estimate", {
-            method: "POST",
+        const response = await api.post("/estimate", formData, {
             headers: {
-            Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
             },
-            body: formData,
         });
 
-        if (!response.ok) {
-            throw new Error("server returned an error");
-        }
-
-        const data = await response.json();
-        onAnalysisComplete(data); // Pass data to parent
+        onAnalysisComplete(response.data); // Pass data to parent
 
         } catch (err) {
         console.error(err);

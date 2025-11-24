@@ -1,29 +1,19 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-.venv
-venv/
-ENV/
-env/
+# Java / Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+!.mvn/wrapper/maven-wrapper.properties
+.m2/
+
+# Spring Boot
+*.log
+logs/
 
 # Node
 node_modules/
@@ -47,7 +37,7 @@ dist-ssr/
 Thumbs.db
 
 # Uploads
-backend/uploads/
+backend-springboot/uploads/
 uploads/
 
 # Environment variables

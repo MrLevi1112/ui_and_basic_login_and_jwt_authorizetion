@@ -1,0 +1,55 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: crash2cost-api
+
+  data:
+    mongodb:
+      # For local MongoDB (requires MongoDB installed):
+      # uri: mongodb://localhost:27017/crash2cost
+
+      # For MongoDB Atlas (cloud - recommended for development):
+      # Replace <username>, <password>, and <cluster-url> with your actual values
+      # uri: mongodb+srv://<username>:<password>@<cluster-url>/crash2cost?retryWrites=true&w=majority
+
+      # Using embedded MongoDB for testing (automatic, no installation needed)
+      uri: mongodb://localhost:27017/crash2cost
+      database: crash2cost
+      auto-index-creation: true
+
+# Embedded MongoDB configuration
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.2
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:change_me_in_production_but_use_env_var}
+  expiration: ${JWT_EXPIRATION:3600000} # 1 hour
+
+# Upload Configuration
+upload:
+  directory: uploads
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:5173
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Logging
+logging:
+  level:
+    com.crash2cost: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO

@@ -1,128 +1,137 @@
-# Crash2Cost - AI-Powered Car Damage Analysis
+# Crash2Cost - Car Damage Estimation System
 
-🚗 **Crash2Cost** is an AI-powered web application for analyzing car damage from images and estimating repair costs.
+Web application for estimating car repair costs using computer vision.
 
-## 🌟 Features
+## ✨ Features
+- 🔐 User authentication (Login/Signup) with JWT
+- 👥 Role-based access control (Admin/User)
+- 📸 Image upload for damage detection
+- 📊 Admin dashboard for viewing all estimates
+- 💰 Real-time damage analysis and cost estimation
+- 🍪 Session persistence with localStorage
+- 🎨 Modern animated UI with gradients
 
-- **User Authentication**: Secure signup and login with JWT tokens
-- **Image Upload**: Drag & drop or browse to upload damaged car images
-- **AI Analysis**: Automatic damage detection and cost estimation
-- **Modern UI**: Beautiful dark theme with animated gradients and effects
-- **Real-time Results**: Instant damage analysis with detailed breakdown
+## 🛠 Tech Stack
 
-## 🛠️ Tech Stack
+### Backend (Spring Boot)
+- Spring Boot 3.2.0
+- Spring Security with JWT
+- Spring Data MongoDB
+- Java 17
+- Maven
 
-### Backend
-- **FastAPI** - Modern Python web framework
-- **MongoDB** - NoSQL database for user and estimation data
-- **JWT** - Secure authentication
-- **bcrypt** - Password hashing
-- **Pydantic** - Data validation
-
-### Frontend
-- **React** - UI library
-- **Vite** - Build tool and dev server
-- **CSS3** - Custom animations and gradients
+### Frontend (React + Vite)
+- React 18
+- Vite
+- Modern CSS with animations
 
 ## 📦 Installation
 
 ### Prerequisites
-- Python 3.13+
-- Node.js 18+
-- MongoDB running on localhost:27017
+- ☕ **Java 17+** - [Download](https://adoptium.net/temurin/releases/?version=17)
+- 📦 **Node.js 16+** - [Download](https://nodejs.org/)
+- 🍃 **MongoDB** - [Download](https://www.mongodb.com/try/download/community)
 
-### Backend Setup
-
+### Setup
 ```bash
-cd backend
-python -m venv .venv
-.venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-python run.py
+# Frontend
+cd frontend/client
+npm install
+
+# Backend (Maven Wrapper auto-downloads dependencies)
+cd backend-springboot
 ```
 
-The backend will run on `http://127.0.0.1:8000`
+## 🚀 Running the Application
 
-### Frontend Setup
-
+### Quick Start (Recommended)
 ```bash
-cd client
-npm install
+# Windows CMD
+start.bat
+
+# PowerShell
+.\start.ps1
+```
+
+Opens:
+- 🟢 Backend: http://127.0.0.1:8001
+- 🔵 Frontend: http://localhost:5173
+
+### Manual Start
+```bash
+# Backend
+cd backend-springboot
+.\mvn.ps1 spring-boot:run
+
+# Frontend
+cd frontend/client
 npm run dev
 ```
 
-The frontend will run on `http://localhost:5173`
+## 🔑 Default Credentials
+- **Admin:** `admin` / `admin123`
+- **User:** Sign up to create account
 
-## 🚀 Usage
+## 📡 API Endpoints
 
-1. **Sign Up**: Create a new account with username, email, and password
-2. **Login**: Sign in with your credentials
-3. **Upload Image**: Drag and drop or select a car damage image
-4. **Analyze**: Click "upload and analyze" to get damage estimation
-5. **View Results**: See detected damage parts, severity, and repair costs
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/` | GET | ❌ | Welcome |
+| `/api/test` | GET | ❌ | Health check |
+| `/api/signup` | POST | ❌ | Register |
+| `/api/login` | POST | ❌ | Login |
+| `/api/estimate` | POST | ✅ | Upload image |
+| `/api/admin/estimates` | GET | ✅ Admin | All estimates |
 
 ## 📁 Project Structure
-
 ```
-crash2cost/
-├── backend/
-│   ├── app/
-│   │   ├── auth/          # JWT authentication
-│   │   ├── database/      # MongoDB connection
-│   │   ├── models/        # Pydantic schemas
-│   │   ├── routes/        # API endpoints
-│   │   ├── services/      # Business logic
-│   │   └── main.py        # FastAPI app
-│   ├── uploads/           # Uploaded images
-│   ├── requirements.txt
-│   └── run.py
-├── client/
-│   ├── src/
-│   │   ├── App.jsx        # Main React component
-│   │   └── App.css        # Styles and animations
-│   ├── package.json
-│   └── vite.config.js
+📦 Crash2Cost
+├── 📂 backend-springboot/     # Spring Boot backend
+│   ├── src/main/java/com/crash2cost/
+│   │   ├── config/           # Security & CORS
+│   │   ├── controller/       # REST APIs
+│   │   ├── model/           # MongoDB entities
+│   │   ├── repository/      # Data access
+│   │   ├── security/        # JWT
+│   │   └── service/         # Business logic
+│   ├── application.yml
+│   └── pom.xml
+├── 📂 frontend/client/        # React app
+│   └── src/
+├── start.bat                 # Startup script
 └── README.md
 ```
 
-## 🔐 API Endpoints
+## ⚙️ Configuration
 
-- `POST /api/signup` - Create new user account
-- `POST /api/login` - Authenticate user
-- `POST /api/estimate` - Upload image and get damage analysis (requires JWT)
-- `GET /api/test` - Health check
+Edit `backend-springboot/src/main/resources/application.yml`:
+```yaml
+server:
+  port: 8001
 
-## 🎨 Features Highlights
-
-- **Animated Background**: Colorful orbiting gradients with pulse effects
-- **Gradient Borders**: Animated rainbow borders on cards
-- **Password Toggle**: Show/hide password with emoji button
-- **Responsive Design**: Works on desktop and mobile
-- **Form Validation**: Email validation and error handling
-- **Loading States**: Visual feedback during API calls
-
-## 📝 Environment Variables
-
-Create a `.env` file in the backend folder (optional):
-
-```env
-MONGODB_URI=mongodb://localhost:27017
-DATABASE_NAME=crash2cost
-SECRET_KEY=your-secret-key-here
+jwt:
+  secret: change_me_in_production
+  expiration: 3600000  # 1 hour
 ```
 
-## 🤝 Contributing
+## 🐛 Troubleshooting
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+**Java not found?**
+See `SETUP_SPRINGBOOT.md`
 
-## 📄 License
+**Port in use?**
+```bash
+netstat -ano | findstr :8001
+taskkill /PID <PID> /F
+```
 
-This project is licensed under the MIT License.
+**MongoDB not running?**
+```bash
+mongosh --eval "db.adminCommand('ping')"
+```
 
-## 👨‍💻 Author
+## 👤 Author
+MrLevi1112
 
-Created with ❤️ by [Your Name]
-
----
-
-**Note**: This is a demonstration project. The AI analysis currently returns dummy data. Integrate with a real computer vision model for production use.
+## 📝 License
+Educational purposes

@@ -1,49 +1,61 @@
-    import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useAuth } from "./context/AuthContext";
 
-    function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+function SignupForm({ onSwitchToLogin }) {
+  const { signup } = useAuth();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Password requirements validation
+  const passwordRequirements = useMemo(() => {
+    return {
+      minLength: {
+        label: "at least 6 characters",
+        met: password.length >= 6,
+      },
+      hasUppercase: {
+        label: "one uppercase letter (A-Z)",
+        met: /[A-Z]/.test(password),
+      },
+      hasLowercase: {
+        label: "one lowercase letter (a-z)",
+        met: /[a-z]/.test(password),
+      },
+      hasNumber: {
+        label: "one number (0-9)",
+        met: /[0-9]/.test(password),
+      },
+      hasSpecial: {
+        label: "one special character (!@#$%^&*)",
+        met: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+      },
+    };
+  }, [password]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
         try {
-        setLoading(true);
-        console.log("🔵 Sending signup request...");
+            setLoading(true);
+            console.log("🔵 Sending signup request...");
 
-        const response = await fetch("http://127.0.0.1:8001/api/signup", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-            username,
-            password,
-            email,
-            }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ detail: "signup failed" }));
-            console.error("❌ Signup error response:", errorData);
-            throw new Error(errorData.detail || "signup failed");
-        }
-
-        const data = await response.json();
-        console.log("✅ Signup successful:", data);
-        
-        onSignupSuccess(data.access_token);
+            await signup({ username, password, email });
+            console.log("✅ Signup successful");
         
         } catch (err) {
-        console.error("❌ Signup error:", err);
-        setError(err.message || "failed to create account");
+            console.error("❌ Signup error:", err);
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError(err.message || "failed to create account");
+            }
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     };
 
@@ -121,6 +133,24 @@
                 </button>
                 </div>
             </label>
+
+            {/* Password Requirements Indicator */}
+            {password && (
+              <div className="password-requirements">
+                <div className="requirements-title">password requirements:</div>
+                {Object.entries(passwordRequirements).map(([key, req]) => (
+                  <div
+                    key={key}
+                    className={`requirement-item ${req.met ? "met" : "unmet"}`}
+                  >
+                    <span className="requirement-icon">
+                      {req.met ? "✓" : "○"}
+                    </span>
+                    <span className="requirement-label">{req.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {error && <div className="login-error">{error}</div>}
 

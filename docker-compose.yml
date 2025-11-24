@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+#   backend:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8001:8001"
+#     environment:
+#       - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/crash2cost
+#       - JWT_SECRET=dev_secret_key_change_in_prod_1234567890
+#       - JWT_EXPIRATION=3600000
+#     depends_on:
+#       - mongo
+#     networks:
+#       - crash2cost-network
+
+#   frontend:
+#     image: node:18-alpine
+#     working_dir: /app
+#     volumes:
+#       - ./frontend/client:/app
+#     command: sh -c "npm install && npm run dev -- --host"
+#     ports:
+#       - "5173:5173"
+#     environment:
+#       - VITE_API_URL=http://localhost:8001/api
+#     depends_on:
+#       - backend
+#     networks:
+#       - crash2cost-network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - crash2cost-network
+
+networks:
+  crash2cost-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
