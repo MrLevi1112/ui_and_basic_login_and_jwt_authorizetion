@@ -1,3 +1,4 @@
+```javascript
 import { useState } from "react";
 import { useAuth } from "./context/AuthContext";
 
@@ -119,3 +120,4 @@ function LoginForm({ onSwitchToSignup }) {
 }
 
 export default LoginForm;
+```

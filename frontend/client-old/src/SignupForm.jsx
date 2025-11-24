@@ -36,28 +36,28 @@ function SignupForm({ onSwitchToLogin }) {
     };
   }, [password]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
 
-    try {
-      setLoading(true);
-      console.log("🔵 Sending signup request...");
+        try {
+            setLoading(true);
+            console.log("🔵 Sending signup request...");
 
-      await signup({ username, password, email });
-      console.log("✅ Signup successful");
-      
-    } catch (err) {
-      console.error("❌ Signup error:", err);
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("failed to create account");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+            await signup({ username, password, email });
+            console.log("✅ Signup successful");
+        
+        } catch (err) {
+            console.error("❌ Signup error:", err);
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError(err.message || "failed to create account");
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="login-root">

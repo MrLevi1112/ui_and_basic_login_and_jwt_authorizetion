@@ -17,13 +17,13 @@ echo OK - Java is installed
 
 REM Start Spring Boot Backend
 echo [1/2] Starting Spring Boot backend on port 8001...
-start "Crash2Cost Backend" cmd /k "cd /d "%~dp0..\backend" && mvn.ps1 spring-boot:run"
+start "Crash2Cost Backend" cmd /k "cd /d "%~dp0backend" && powershell -ExecutionPolicy Bypass -File mvn.ps1 spring-boot:run"
 
 timeout /t 5 /nobreak > nul
 
 REM Start React Frontend
 echo [2/2] Starting React frontend on port 5173...
-start "Crash2Cost Frontend" cmd /k "cd /d "%~dp0..\frontend\client" && npm run dev"
+start "Crash2Cost Frontend" cmd /k "cd /d "%~dp0frontend\client" && npm run dev"
 
 echo.
 echo ================================

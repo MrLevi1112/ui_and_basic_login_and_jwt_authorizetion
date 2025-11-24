@@ -25,12 +25,12 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await api.post('/login', { username, password });
-      const { access_token } = response.data;
+      const { accessToken } = response.data;
       
-      localStorage.setItem('crash2cost_token', access_token);
-      setToken(access_token);
+      localStorage.setItem('crash2cost_token', accessToken);
+      setToken(accessToken);
       
-      const decoded = JSON.parse(atob(access_token.split('.')[1]));
+      const decoded = JSON.parse(atob(accessToken.split('.')[1]));
       setUser({ username: decoded.sub, role: decoded.role });
       
       return true;
@@ -43,12 +43,12 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       const response = await api.post('/signup', userData);
-      const { access_token } = response.data;
+      const { accessToken } = response.data;
       
-      localStorage.setItem('crash2cost_token', access_token);
-      setToken(access_token);
+      localStorage.setItem('crash2cost_token', accessToken);
+      setToken(accessToken);
       
-      const decoded = JSON.parse(atob(access_token.split('.')[1]));
+      const decoded = JSON.parse(atob(accessToken.split('.')[1]));
       setUser({ username: decoded.sub, role: decoded.role });
       
       return true;

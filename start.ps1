@@ -16,7 +16,7 @@ catch {
     exit 1
 }
 
-$rootDir = Join-Path $PSScriptRoot ".."
+$rootDir = $PSScriptRoot
 
 Write-Host "[1/2] Starting Spring Boot backend on port 8001..." -ForegroundColor Yellow
 $backendScript = Join-Path $rootDir "backend\mvn.ps1"
